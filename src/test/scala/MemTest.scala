@@ -34,4 +34,10 @@ class SegmentedMemorySpec extends FlatSpec with ShouldMatchers {
     segmented.readByte(baseAddr + (segSize * 1024) + 300) should equal (0xFF)
   }
 
+  it should "not write to readonly segment" in {
+    val readonly = (new SegmentedMemory)
+      .addSegment("rom", new MemorySpace(1024), 0, false)
+    intercept[IllegalArgumentException](readonly.writeLong(0, 0xDEADBEEF))
+  }
+
 }
